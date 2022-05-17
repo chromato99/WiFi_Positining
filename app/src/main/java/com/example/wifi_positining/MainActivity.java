@@ -24,16 +24,15 @@ import android.widget.Button;
 import java.util.List;
 import java.util.concurrent.Executor;
 
+import java.lang.Object;
+
 public class MainActivity extends AppCompatActivity {
 
     private WifiManager wifiManager;
     private WifiRttManager wifiRttManager;
     private Context context;
-    private Context context2;
     private BroadcastReceiver wifiScanReceiver;
-    private BroadcastReceiver wifiRttReceiver;
     private IntentFilter intentFilter;
-    private IntentFilter intentFilter2;
     private Button button;
     private RangingRequest.Builder builder;
     private RangingRequest req;
@@ -65,7 +64,6 @@ public class MainActivity extends AppCompatActivity {
         };
 
 
-
         intentFilter = new IntentFilter();
         intentFilter.addAction(WifiManager.SCAN_RESULTS_AVAILABLE_ACTION);
         context.registerReceiver(wifiScanReceiver, intentFilter);
@@ -94,25 +92,22 @@ public class MainActivity extends AppCompatActivity {
             Log.d("test12", results.get(i).toString());
         }
 
-        context2 =  getApplicationContext();
-        wifiRttManager = (WifiRttManager) context2.getSystemService(Context.WIFI_RTT_RANGING_SERVICE);
-        wifiRttReceiver = new BroadcastReceiver() {
-            @Override
-            public void onReceive(Context context, Intent intent) {
-                if (wifiRttManager.isAvailable()) {
-                    Log.d("test12", "Rtt available!!");
-                } else {
-                    Log.d("test12", "Rtt not available");
-                }
-            }
-        };
-        intentFilter2 = new IntentFilter(WifiRttManager.ACTION_WIFI_RTT_STATE_CHANGED);
-        context2.registerReceiver(wifiRttReceiver, intentFilter2);
+
+        if (context.getPackageManager().hasSystemFeature(PackageManager.FEATURE_WIFI_RTT)) {
+            Log.d("test12", "Rtt config!!");
+        }
+
+        wifiRttManager = (WifiRttManager) context.getSystemService(Context.WIFI_RTT_RANGING_SERVICE);
+
+        if (wifiRttManager.isAvailable()) {
+            Log.d("test12", "Rtt available!!");
+        } else {
+            Log.d("test12", "Rtt not available");
+        }
 
         builder = new RangingRequest.Builder();
         builder.addAccessPoints(results);
-        req = builder.build();
-        executor = context2.getMainExecutor();
+        RangingRequest request = builder.build();
 
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             // TODO: Consider calling
@@ -124,20 +119,65 @@ public class MainActivity extends AppCompatActivity {
             // for ActivityCompat#requestPermissions for more details.
             return;
         }
+        wifiRttManager.startRanging(request, executor, new RangingResultCallback() {
 
-        wifiRttManager.startRanging(req, executor, new RangingResultCallback() {
             @Override
-            public void onRangingFailure(int i) {
-                Log.d("test12", "Fail ranging");
+            public void onRangingFailure(int code) {
+                Log.d("test12", Integer.toString(code));
             }
 
             @Override
-            public void onRangingResults(@NonNull List<RangingResult> list) {
-                for(int i = 0; i < list.size(); i++) {
-                    Log.d("test12", list.get(i).toString());
+            public void onRangingResults(List<RangingResult> results) {
+                for (int i = 0; i < results.size(); i++) {
+                    Log.d("test12", results.get(i).toString());
                 }
             }
         });
+
+//        context2 =  getApplicationContext();
+//        wifiRttManager = (WifiRttManager) context2.getSystemService(Context.WIFI_RTT_RANGING_SERVICE);
+//        wifiRttReceiver = new BroadcastReceiver() {
+//            @Override
+//            public void onReceive(Context context, Intent intent) {
+//                if (wifiRttManager.isAvailable()) {
+//                    Log.d("test12", "Rtt available!!");
+//                } else {
+//                    Log.d("test12", "Rtt not available");
+//                }
+//            }
+//        };
+//        intentFilter2 = new IntentFilter(WifiRttManager.ACTION_WIFI_RTT_STATE_CHANGED);
+//        context2.registerReceiver(wifiRttReceiver, intentFilter2);
+//
+//        builder = new RangingRequest.Builder();
+//        builder.addAccessPoints(results);
+//        req = builder.build();
+//        executor = context2.getMainExecutor();
+//
+//        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+//            // TODO: Consider calling
+//            //    ActivityCompat#requestPermissions
+//            // here to request the missing permissions, and then overriding
+//            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+//            //                                          int[] grantResults)
+//            // to handle the case where the user grants the permission. See the documentation
+//            // for ActivityCompat#requestPermissions for more details.
+//            return;
+//        }
+//
+//        wifiRttManager.startRanging(req, executor, new RangingResultCallback() {
+//            @Override
+//            public void onRangingFailure(int i) {
+//                Log.d("test12", "Fail ranging");
+//            }
+//
+//            @Override
+//            public void onRangingResults(@NonNull List<RangingResult> list) {
+//                for(int i = 0; i < list.size(); i++) {
+//                    Log.d("test12", list.get(i).toString());
+//                }
+//            }
+//        });
     }
 
     private void scanFailure() {

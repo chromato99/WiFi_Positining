@@ -20,6 +20,9 @@
         android:theme="@style/Theme.WiFi_Positining"
         tools:targetApi="31">
         <activity
+            android:name=".WifiScanActivity"
+            android:exported="false" />
+        <activity
             android:name=".MainActivity"
             android:exported="true">
             <intent-filter>

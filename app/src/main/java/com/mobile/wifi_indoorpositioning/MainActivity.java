@@ -42,6 +42,7 @@ public class MainActivity extends AppCompatActivity {
     private ArrayAdapter adapter;
 
     private String URL = "http://server.chromato99.com/test";
+    //private String location;
     //private String Wmac;
     //private int Wrss;
 
@@ -65,10 +66,10 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View v) {
                 new Thread() {
                     public void run() {
-                        String result;
+                        String result="Fail";
                         Post post = new Post();
                         result = post.POST(URL);
-                        Log.d("test12", result);
+                        Log.d("test12", "Result : " + result);
                     }
                 }.start();
             }});
@@ -97,4 +98,5 @@ public class MainActivity extends AppCompatActivity {
 
             }
         }
-    };}
+    };
+}

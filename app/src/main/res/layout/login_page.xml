@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".MainActivity">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:background="#FFFFFF"
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
+
+        <ImageView
+            android:layout_width="314dp"
+            android:layout_height="match_parent"
+            android:background="@drawable/edge"
+            android:scaleType="centerCrop"
+            android:src="@drawable/marklogo_slogan" />
+        <View
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_weight="1" />
+
+
+        <ImageView
+            android:layout_width="62dp"
+            android:layout_height="match_parent"
+            android:layout_gravity="right"
+            android:src="@drawable/ic_baseline_menu_24" />
+    </LinearLayout>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:background="@drawable/edge"
+        android:gravity="center"
+        android:textSize="28sp"
+        android:textStyle="bold"
+        android:text="2022.05.17(화)" />
+
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:adjustViewBounds="true"
+        android:src="@drawable/statue" />
+
+    <Button
+        android:id="@+id/button"
+        android:layout_width="match_parent"
+        android:layout_height="72dp"
+        android:layout_marginTop="10dp"
+        android:text="출석체크"
+        android:textSize="28sp"
+        android:textStyle="bold" />
+
+    <EditText
+        android:id="@+id/idText"
+        android:layout_width="385dp"
+        android:layout_height="56dp"
+        android:layout_gravity="center"
+        android:layout_marginTop="30dp"
+        android:background="@color/teal_200"
+        android:drawableStart="@drawable/ic_baseline_person_24"
+        android:drawableLeft="@drawable/ic_baseline_person_24"
+        android:hint="아이디(ID)"
+        android:padding="15dp"
+        android:textColor="#ffffff"
+        android:textSize="20sp" />
+
+    <EditText
+        android:id="@+id/passwordText"
+        android:layout_width="385dp"
+        android:layout_height="56dp"
+        android:layout_gravity="center"
+        android:layout_marginTop="30dp"
+        android:background="@color/teal_200"
+        android:drawableStart="@drawable/ic_baseline_https_24"
+        android:drawableLeft="@drawable/ic_baseline_https_24"
+        android:hint="비밀번호(PW)"
+        android:inputType="textPassword"
+        android:padding="15dp"
+        android:textColor="#ffffff"
+        android:textSize="20sp" />
+
+    <View
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_weight="1" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:background="#1D6A96"
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
+
+        <ImageView
+            android:layout_width="89dp"
+            android:layout_height="match_parent"
+            android:src="@drawable/ic_baseline_home_24" />
+
+        <ImageView
+            android:layout_width="80dp"
+            android:layout_height="match_parent"
+            android:src="@drawable/ic_outline_replay_24" />
+
+        <ImageView
+            android:layout_width="80dp"
+            android:layout_height="match_parent"
+            android:src="@drawable/ic_baseline_question_answer_24" />
+
+        <ImageView
+            android:layout_width="80dp"
+            android:layout_height="match_parent"
+            android:src="@drawable/ic_baseline_event_24" />
+
+        <ImageView
+            android:layout_width="80dp"
+            android:layout_height="match_parent"
+            android:src="@drawable/ic_baseline_exit_to_app_24" />
+
+
+    </LinearLayout>
+
+
+</LinearLayout>

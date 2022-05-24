@@ -4,14 +4,11 @@
     <option name="filePathToZoomLevelMap">
       <map>
         <entry key="..\:/D/Android_Studio/app/src/main/res/layout/activity_main.xml" value="0.14375" />
+        <entry key="..\:/D/Android_Studio/app/src/main/res/layout/activity_main2.xml" value="0.14322916666666666" />
         <entry key="..\:/D/Android_Studio/app/src/main/res/layout/activity_wifi_scan.xml" value="0.14375" />
-        <entry key="app/src/main/res/drawable-v24/edge.xml" value="0.1" />
-        <entry key="app/src/main/res/drawable-v24/edge2.xml" value="0.1" />
-        <entry key="app/src/main/res/drawable-v24/edge3.xml" value="0.1" />
-        <entry key="app/src/main/res/drawable-v24/ic_launcher_background.xml" value="0.1" />
-        <entry key="app/src/main/res/drawable-v24/ic_launcher_foreground.xml" value="0.126" />
-        <entry key="app/src/main/res/layout/activity_main.xml" value="0.1" />
-        <entry key="app/src/main/res/layout/activity_main2.xml" value="0.15070921985815602" />
+        <entry key="..\:/D/Android_Studio/app/src/main/res/layout/activty_main.xml" value="0.14322916666666666" />
+        <entry key="..\:/D/Android_Studio/app/src/main/res/layout/sudo.xml" value="0.14322916666666666" />
+        <entry key="app/src/main/res/layout/activity_main.xml" value="0.39947916666666666" />
       </map>
     </option>
   </component>

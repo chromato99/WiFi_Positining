@@ -13,6 +13,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ListView;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -34,17 +35,28 @@ public class MainActivity extends AppCompatActivity {
 
     private Button scanButton;
     private Button sendButton;
+    private EditText locationText;
+    private Button request;
 
     private WifiManager wifiManager;
-    private ListView listView;
     private List<ScanResult> scanResultList;
     private ArrayList<String> arrayList = new ArrayList<>();
     private ArrayAdapter adapter;
 
-    private String URL = "http://server.chromato99.com/test";
-    //private String location;
-    //private String Wmac;
-    //private int Wrss;
+    private String URL = "http://server.chromato99.com/add";
+    private String location;
+    private String Wmac;
+    private int Wrss;
+    private String StrWrss;
+    private String WLocation;
+
+    JSONArray WjsonArray = new JSONArray();
+    JSONObject WjsonParam = new JSONObject();
+    JSONObject resultObj = new JSONObject();
+
+    List<String> list = new ArrayList<String>();
+    JSONObject obj = new JSONObject();
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,32 +64,30 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         scanButton = findViewById(R.id.scanBtn);
-        sendButton = findViewById(R.id.sendBtn);
+        request = findViewById(R.id.requestPosition);
 
         scanButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                URL = "http://server.chromato99.com/add";
+                locationText = findViewById(R.id.EditLocation);
+                WLocation = locationText.getText().toString();
+                wifiManager = (WifiManager) getApplicationContext().getSystemService(Context.WIFI_SERVICE);
                 scanWifi();
             }
         });
 
-        sendButton.setOnClickListener(new View.OnClickListener() {
+        request.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                new Thread() {
-                    public void run() {
-                        String result="Fail";
-                        Post post = new Post();
-                        result = post.POST(URL);
-                        Log.d("test12", "Result : " + result);
-                    }
-                }.start();
-            }});
+                URL = "http://server.chromato99.com/findPosition";
+                locationText = findViewById(R.id.EditLocation);
+                WLocation = locationText.getText().toString();
+                wifiManager = (WifiManager) getApplicationContext().getSystemService(Context.WIFI_SERVICE);
+                scanWifi();
+            }
+        });
 
-        listView = findViewById(R.id.wifiList);
-        wifiManager = (WifiManager) getApplicationContext().getSystemService(Context.WIFI_SERVICE);
-        adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, arrayList);
-        listView.setAdapter(adapter);
     }
 
     private void scanWifi() {
@@ -93,10 +103,41 @@ public class MainActivity extends AppCompatActivity {
             unregisterReceiver(this);
 
             for (ScanResult scanResult : scanResultList) {
-                arrayList.add(scanResult.SSID + "\n" + scanResult.BSSID + "\n" + scanResult.level);
-                adapter.notifyDataSetChanged(); // listview로 보낼 정보들 습득 + adapter로 연결
 
+                Wmac = scanResult.BSSID;
+                Wrss = scanResult.level;
+                StrWrss = String.valueOf(Wrss);
+                JSONArray array = new JSONArray();
+
+                try {
+                    resultObj.put("position", WLocation);
+                } catch(JSONException e) {
+                    e.printStackTrace();
+                }
+                for(int i = 0; i<scanResultList.size(); i++){
+                    try {
+                        WjsonParam.put("mac",Wmac);
+                        WjsonParam.put("rss",StrWrss);
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                    array.put(WjsonParam);
+                }
+                try {
+                    resultObj.put("wifi_data",array);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
             }
+            new Thread() {
+                public void run() {
+                    String result="Fail";
+                    Post post = new Post();
+                    result = post.POST(URL,resultObj);
+                    Log.d("test12", "Result : " + result);
+                }
+            }.start();
+
         }
     };
 }

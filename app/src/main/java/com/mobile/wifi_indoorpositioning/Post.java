@@ -1,6 +1,7 @@
 package com.mobile.wifi_indoorpositioning;
 
 import android.util.Log;
+import android.widget.Toast;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -10,15 +11,17 @@ import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.lang.reflect.Array;
 import java.net.HttpURLConnection;
 
 import java.net.URL;
+import java.util.List;
 
 public class Post {
 
     public Post(){}
 
-    public static String POST(String urlAddress) {
+    public String POST(String urlAddress, JSONObject data) {
         Log.d("test12", "POST start");
         String result = null;
         try {
@@ -33,17 +36,10 @@ public class Post {
             InputStream is = null;
             result = "";
 
-            JSONArray jsonArray = new JSONArray();
-            JSONObject jsonParam = new JSONObject();
-            Log.d("test12", "POST start");
-            jsonParam.put("mac", "11:11:11:11");
-            jsonParam.put("rss", -49);
-            jsonArray.put(jsonParam);
-
-            Log.d("test12", jsonArray.toString());
+            Log.d("test12", data.toString());
             DataOutputStream os = new DataOutputStream(conn.getOutputStream());
             //os.writeBytes(URLEncoder.encode(jsonParam.toString(), "UTF-8"));
-            os.writeBytes(jsonParam.toString());
+            os.writeBytes(data.toString());
             os.flush();
             os.close();
 
@@ -67,11 +63,8 @@ public class Post {
             } finally {
                 conn.disconnect();
             }
-            conn.disconnect();
         } catch (IOException e) {
             e.printStackTrace();
-        } catch (Exception e) {
-            Log.d("InputStream", e.getLocalizedMessage());
         }
         return result;
     }

@@ -15,6 +15,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -37,6 +38,7 @@ public class MainActivity extends AppCompatActivity {
     private Button sendButton;
     private EditText locationText;
     private Button request;
+    private TextView locationResult;
 
     private WifiManager wifiManager;
     private List<ScanResult> scanResultList;
@@ -44,6 +46,7 @@ public class MainActivity extends AppCompatActivity {
     private ArrayAdapter adapter;
 
     private String URL = "http://server.chromato99.com/add";
+    private String URL2 = "http://server.chromato99.com/findPosition";
     private String location;
     private String Wmac;
     private int Wrss;
@@ -65,6 +68,7 @@ public class MainActivity extends AppCompatActivity {
 
         scanButton = findViewById(R.id.scanBtn);
         request = findViewById(R.id.requestPosition);
+        locationResult = findViewById(R.id.LocationResult);
 
         scanButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -135,6 +139,7 @@ public class MainActivity extends AppCompatActivity {
                     Post post = new Post();
                     result = post.POST(URL,resultObj);
                     Log.d("test12", "Result : " + result);
+                    locationResult.setText(result);
                 }
             }.start();
 

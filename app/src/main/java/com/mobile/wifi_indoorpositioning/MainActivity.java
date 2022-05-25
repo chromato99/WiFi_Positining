@@ -106,32 +106,40 @@ public class MainActivity extends AppCompatActivity {
             scanResultList = wifiManager.getScanResults();
             unregisterReceiver(this);
 
-            for (ScanResult scanResult : scanResultList) {
+//            for(ScanResult scanResult : scanResultList) {
+//                Log.d("test12", scanResult.BSSID + scanResult.level);
+//            }
+            try {
+                resultObj.put("position", WLocation);
+            } catch(JSONException e) {
+                e.printStackTrace();
+            }
 
+            JSONArray array = new JSONArray();
+            for (ScanResult scanResult : scanResultList) {
+                WjsonParam = new JSONObject();
                 Wmac = scanResult.BSSID;
                 Wrss = scanResult.level;
                 StrWrss = String.valueOf(Wrss);
-                JSONArray array = new JSONArray();
+
+
 
                 try {
-                    resultObj.put("position", WLocation);
-                } catch(JSONException e) {
-                    e.printStackTrace();
-                }
-                for(int i = 0; i<scanResultList.size(); i++){
-                    try {
-                        WjsonParam.put("mac",Wmac);
-                        WjsonParam.put("rss",StrWrss);
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    }
-                    array.put(WjsonParam);
-                }
-                try {
-                    resultObj.put("wifi_data",array);
+                    WjsonParam.put("mac",Wmac);
+                    WjsonParam.put("rss",StrWrss);
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
+                array.put(WjsonParam);
+
+
+
+            }
+
+            try {
+                resultObj.put("wifi_data",array);
+            } catch (JSONException e) {
+                e.printStackTrace();
             }
             new Thread() {
                 public void run() {
@@ -139,7 +147,7 @@ public class MainActivity extends AppCompatActivity {
                     Post post = new Post();
                     result = post.POST(URL,resultObj);
                     Log.d("test12", "Result : " + result);
-                    locationResult.setText(result);
+                    //locationResult.setText(result);
                 }
             }.start();
 

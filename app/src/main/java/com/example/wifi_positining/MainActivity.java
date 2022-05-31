@@ -153,14 +153,13 @@ public class MainActivity extends AppCompatActivity {
 
             try {
                 RequestQueue requestQueue = Volley.newRequestQueue(getApplicationContext());
-
-                String mRequestBody = resultObj.toString();
+                String mRequestBody = resultObj.toString(); // json을 통신으로 보내기위해 문자열로 변환하는 부분
 
                 StringRequest stringRequest = new StringRequest(Request.Method.POST, URL, new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
                         Log.i("test12", response);
-                        locationResult.setText(response);
+                        locationResult.setText(response); // 결과 출력해주는 부분
                     }
                 }, new Response.ErrorListener() {
                     @Override
@@ -174,7 +173,7 @@ public class MainActivity extends AppCompatActivity {
                     }
 
                     @Override
-                    public byte[] getBody() throws AuthFailureError {
+                    public byte[] getBody() throws AuthFailureError { // 요청 보낼 데이터를 처리하는 부분
                         try {
                             return mRequestBody == null ? null : mRequestBody.getBytes("utf-8");
                         } catch (UnsupportedEncodingException uee) {
@@ -184,10 +183,10 @@ public class MainActivity extends AppCompatActivity {
                     }
 
                     @Override
-                    protected Response<String> parseNetworkResponse(NetworkResponse response) {
+                    protected Response<String> parseNetworkResponse(NetworkResponse response) { // onResponse에 넘겨줄 응답을 처리하는 부분
                         String responseString = "";
                         if (response != null) {
-                            responseString = new String(response.data, StandardCharsets.UTF_8);
+                            responseString = new String(response.data, StandardCharsets.UTF_8); // 응답 데이터를 변환해주는 부분
                         }
                         return Response.success(responseString, HttpHeaderParser.parseCacheHeaders(response));
                     }

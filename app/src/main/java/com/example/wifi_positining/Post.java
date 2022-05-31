@@ -1,4 +1,4 @@
-package com.mobile.wifi_indoorpositioning;
+package com.example.wifi_positining;
 
 import android.util.Log;
 import android.widget.Toast;

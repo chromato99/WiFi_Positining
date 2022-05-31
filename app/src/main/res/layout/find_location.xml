@@ -87,7 +87,7 @@
         android:background="@drawable/edge3"
         android:gravity="center"
         android:text="위치정보???나오는 칸??"
-        android:textSize="28sp"
+        android:textSize="18sp"
         android:textStyle="bold" />
 
     <View

@@ -19,7 +19,23 @@ import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.android.volley.AuthFailureError;
+import com.android.volley.Cache;
+import com.android.volley.Network;
+import com.android.volley.NetworkResponse;
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.VolleyLog;
+import com.android.volley.toolbox.BasicNetwork;
+import com.android.volley.toolbox.DiskBasedCache;
+import com.android.volley.toolbox.HttpHeaderParser;
 import com.android.volley.toolbox.HttpResponse;
+import com.android.volley.toolbox.HurlStack;
+import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
 
 
 import org.json.JSONArray;
@@ -27,7 +43,9 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.net.URL;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -43,7 +61,6 @@ public class MainActivity extends AppCompatActivity {
     private ArrayList<String> arrayList = new ArrayList<>();
 
     private String URL = "http://server.chromato99.com/add";
-    private String URL2 = "http://server.chromato99.com/findPosition";
     private String Wmac;
     private int Wrss;
     private String StrWrss;
@@ -99,14 +116,14 @@ public class MainActivity extends AppCompatActivity {
 
             TextView appLog = findViewById(R.id.app_log);
             String scanLog = "";
-            for(ScanResult scanResult : scanResultList) {
+            for (ScanResult scanResult : scanResultList) {
                 scanLog += "BSSID: " + scanResult.BSSID + "  level: " + scanResult.level + "\n";
             }
             appLog.setText(scanLog);
 
             try {
                 resultObj.put("position", WLocation);
-            } catch(JSONException e) {
+            } catch (JSONException e) {
                 e.printStackTrace();
             }
 
@@ -118,10 +135,9 @@ public class MainActivity extends AppCompatActivity {
                 StrWrss = String.valueOf(Wrss);
 
 
-
                 try {
-                    WjsonParam.put("mac",Wmac);
-                    WjsonParam.put("rss",StrWrss);
+                    WjsonParam.put("mac", Wmac);
+                    WjsonParam.put("rss", StrWrss);
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
@@ -129,18 +145,60 @@ public class MainActivity extends AppCompatActivity {
             }
 
             try {
-                resultObj.put("wifi_data",array);
+                resultObj.put("wifi_data", array);
             } catch (JSONException e) {
                 e.printStackTrace();
             }
-            new Thread(() -> {
-                String result="Fail";
-                Post post = new Post();
-                result = post.POST(URL,resultObj);
-                Log.d("test12", "Result : " + result);
-                locationResult.setText(result);
-            }).start();
 
+
+            try {
+                RequestQueue requestQueue = Volley.newRequestQueue(getApplicationContext());
+
+                String mRequestBody = resultObj.toString();
+
+                StringRequest stringRequest = new StringRequest(Request.Method.POST, URL, new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        Log.i("test12", response);
+                        locationResult.setText(response);
+                    }
+                }, new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        Log.e("test12", error.toString());
+                    }
+                }) {
+                    @Override
+                    public String getBodyContentType() {
+                        return "application/json; charset=utf-8";
+                    }
+
+                    @Override
+                    public byte[] getBody() throws AuthFailureError {
+                        try {
+                            return mRequestBody == null ? null : mRequestBody.getBytes("utf-8");
+                        } catch (UnsupportedEncodingException uee) {
+                            VolleyLog.wtf("Unsupported Encoding while trying to get the bytes of %s using %s", mRequestBody, "utf-8");
+                            return null;
+                        }
+                    }
+
+                    @Override
+                    protected Response<String> parseNetworkResponse(NetworkResponse response) {
+                        String responseString = "";
+                        if (response != null) {
+                            responseString = new String(response.data, StandardCharsets.UTF_8);
+                        }
+                        return Response.success(responseString, HttpHeaderParser.parseCacheHeaders(response));
+                    }
+                };
+
+                requestQueue.add(stringRequest);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
+
+
     };
 }

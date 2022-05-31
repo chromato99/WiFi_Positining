@@ -6,11 +6,13 @@ import android.widget.Toast;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import java.io.BufferedOutputStream;
 import java.io.BufferedReader;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.OutputStream;
 import java.lang.reflect.Array;
 import java.net.HttpURLConnection;
 
@@ -36,6 +38,7 @@ public class Post {
             InputStream is = null;
             result = "";
 
+            conn.connect();
             Log.d("test12", data.toString());
             DataOutputStream os = new DataOutputStream(conn.getOutputStream());
             //os.writeBytes(URLEncoder.encode(jsonParam.toString(), "UTF-8"));
@@ -43,8 +46,7 @@ public class Post {
             os.flush();
             os.close();
 
-            conn.connect();
-
+//            conn.connect();
             Log.d("test12", String.valueOf(conn.getResponseCode()));
             Log.d("test12", conn.getResponseMessage());
 
@@ -55,6 +57,7 @@ public class Post {
                     result = convertInputStreamToString(is);
                 }else
                     result = "No Data";
+                    Log.d("test12", "No Data");
                 if(result == null){
                     result = "IT's NULL";
                 }

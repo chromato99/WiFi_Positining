@@ -44,17 +44,22 @@
         android:textSize="28sp"
         android:textStyle="bold" />
 
-
-    <TextView
-        android:id="@+id/app_log"
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="415dp"
-        android:text="TextView" />
+        android:layout_height="415dp" >
+        <TextView
+            android:id="@+id/app_log"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:text="TextView" />
+
+    </ScrollView>
 
     <EditText
         android:id="@+id/positionInput"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:hint="Position Data"
         android:textSize="18sp" />
 
     <LinearLayout
@@ -81,14 +86,12 @@
     <TextView
         android:id="@+id/LocationResult"
         android:layout_width="match_parent"
-
         android:layout_height="wrap_content"
         android:layout_marginTop="30dp"
         android:background="@drawable/edge3"
         android:gravity="center"
         android:text="위치정보???나오는 칸??"
-        android:textSize="18sp"
-        android:textStyle="bold" />
+        android:textSize="18sp" />
 
     <View
         android:layout_width="0dp"

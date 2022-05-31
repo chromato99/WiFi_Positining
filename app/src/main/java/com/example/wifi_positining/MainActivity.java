@@ -5,35 +5,23 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.net.wifi.ScanResult;
-import android.net.wifi.WifiInfo;
 import android.net.wifi.WifiManager;
 import android.os.Bundle;
-import android.os.StrictMode;
 import android.util.Log;
 import android.view.View;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ListView;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.android.volley.AuthFailureError;
-import com.android.volley.Cache;
-import com.android.volley.Network;
 import com.android.volley.NetworkResponse;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
-import com.android.volley.VolleyLog;
-import com.android.volley.toolbox.BasicNetwork;
-import com.android.volley.toolbox.DiskBasedCache;
 import com.android.volley.toolbox.HttpHeaderParser;
-import com.android.volley.toolbox.HttpResponse;
-import com.android.volley.toolbox.HurlStack;
-import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 
@@ -42,11 +30,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.IOException;
-import java.io.UnsupportedEncodingException;
-import java.net.URL;
 import java.nio.charset.StandardCharsets;
-import java.util.ArrayList;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
@@ -58,7 +42,6 @@ public class MainActivity extends AppCompatActivity {
 
     private WifiManager wifiManager;
     private List<ScanResult> scanResultList;
-    private ArrayList<String> arrayList = new ArrayList<>();
 
     private String URL = "http://server.chromato99.com/add";
     private String Wmac;
@@ -103,7 +86,6 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void scanWifi() {
-        arrayList.clear();
         registerReceiver(wifiReceiver, new IntentFilter(WifiManager.SCAN_RESULTS_AVAILABLE_ACTION));
         wifiManager.startScan();
     }
@@ -113,6 +95,9 @@ public class MainActivity extends AppCompatActivity {
         public void onReceive(Context context, Intent intent) {
             scanResultList = wifiManager.getScanResults();
             unregisterReceiver(this);
+            // scan result 정렬
+            scanResultList.sort((s1, s2) -> s2.level - s1.level);
+
 
             TextView appLog = findViewById(R.id.app_log);
             String scanLog = "";
@@ -174,12 +159,7 @@ public class MainActivity extends AppCompatActivity {
 
                     @Override
                     public byte[] getBody() throws AuthFailureError { // 요청 보낼 데이터를 처리하는 부분
-                        try {
-                            return mRequestBody == null ? null : mRequestBody.getBytes("utf-8");
-                        } catch (UnsupportedEncodingException uee) {
-                            VolleyLog.wtf("Unsupported Encoding while trying to get the bytes of %s using %s", mRequestBody, "utf-8");
-                            return null;
-                        }
+                        return mRequestBody == null ? null : mRequestBody.getBytes(StandardCharsets.UTF_8);
                     }
 
                     @Override

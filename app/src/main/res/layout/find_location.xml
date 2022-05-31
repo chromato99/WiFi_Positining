@@ -2,6 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/positionResult"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
@@ -20,6 +21,7 @@
             android:background="@drawable/edge"
             android:scaleType="centerCrop"
             android:src="@drawable/marklogo_slogan" />
+
         <View
             android:layout_width="0dp"
             android:layout_height="0dp"
@@ -35,35 +37,52 @@
 
     <TextView
         android:layout_width="match_parent"
-        android:layout_height="40dp"
+        android:layout_height="wrap_content"
         android:background="@drawable/edge"
         android:gravity="center"
-        android:textSize="28sp"
-        android:textStyle="bold"
-        android:text="2022.05.17(화)" />
-
-    <ImageView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:adjustViewBounds="true"
-        android:src="@drawable/statue" />
-
-
-    <ImageButton
-        android:id="@+id/button3"
-        android:layout_width="319dp"
-        android:layout_gravity="center"
-        android:layout_height="179dp"
-        android:layout_marginTop="20dp"
-        android:background="@drawable/pngwing_com"
-        android:text="위치정보탐색"
+        android:text="2022.05.17(화)"
         android:textSize="28sp"
         android:textStyle="bold" />
 
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="40dp"
 
+    <TextView
+        android:id="@+id/app_log"
+        android:layout_width="match_parent"
+        android:layout_height="415dp"
+        android:text="TextView" />
+
+    <EditText
+        android:id="@+id/positionInput"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="18sp" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <Button
+            android:id="@+id/scanBtn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Add Dataset" />
+
+        <Button
+            android:id="@+id/requestPosition"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Find Position" />
+
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/LocationResult"
+        android:layout_width="match_parent"
+
+        android:layout_height="wrap_content"
         android:layout_marginTop="30dp"
         android:background="@drawable/edge3"
         android:gravity="center"

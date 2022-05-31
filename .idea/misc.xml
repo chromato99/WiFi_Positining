@@ -16,12 +16,12 @@
         <entry key="app/src/main/res/drawable-v24/edge3.xml" value="0.1" />
         <entry key="app/src/main/res/drawable-v24/ic_launcher_background.xml" value="0.1" />
         <entry key="app/src/main/res/drawable-v24/ic_launcher_foreground.xml" value="0.126" />
-        <entry key="app/src/main/res/layout/activity_main.xml" value="0.1" />
+        <entry key="app/src/main/res/layout/activity_main.xml" value="0.33" />
         <entry key="app/src/main/res/layout/activity_main2.xml" value="0.1" />
         <entry key="app/src/main/res/layout/activity_wifi_scan.xml" value="0.28229166666666666" />
         <entry key="app/src/main/res/layout/find_location.xml" value="0.28229166666666666" />
         <entry key="app/src/main/res/layout/login_page.xml" value="0.28229166666666666" />
-        <entry key="app/src/main/res/layout/sudo.xml" value="0.1" />
+        <entry key="app/src/main/res/layout/sudo.xml" value="0.33" />
       </map>
     </option>
   </component>

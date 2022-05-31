@@ -34,7 +34,6 @@ import java.util.List;
 public class MainActivity extends AppCompatActivity {
 
     private Button scanButton;
-    private Button sendButton;
     private EditText locationText;
     private Button request;
     private TextView locationResult;
@@ -42,28 +41,21 @@ public class MainActivity extends AppCompatActivity {
     private WifiManager wifiManager;
     private List<ScanResult> scanResultList;
     private ArrayList<String> arrayList = new ArrayList<>();
-    private ArrayAdapter adapter;
 
     private String URL = "http://server.chromato99.com/add";
     private String URL2 = "http://server.chromato99.com/findPosition";
-    private String location;
     private String Wmac;
     private int Wrss;
     private String StrWrss;
     private String WLocation;
 
-    JSONArray WjsonArray = new JSONArray();
     JSONObject WjsonParam = new JSONObject();
     JSONObject resultObj = new JSONObject();
-
-    List<String> list = new ArrayList<String>();
-    JSONObject obj = new JSONObject();
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.find_location);
 
         scanButton = findViewById(R.id.scanBtn);
         request = findViewById(R.id.requestPosition);
@@ -73,7 +65,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 URL = "http://server.chromato99.com/add";
-                locationText = findViewById(R.id.EditLocation);
+                locationText = findViewById(R.id.positionInput);
                 WLocation = locationText.getText().toString();
                 wifiManager = (WifiManager) getApplicationContext().getSystemService(Context.WIFI_SERVICE);
                 scanWifi();
@@ -84,7 +76,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 URL = "http://server.chromato99.com/findPosition";
-                locationText = findViewById(R.id.EditLocation);
+                locationText = findViewById(R.id.positionInput);
                 WLocation = locationText.getText().toString();
                 wifiManager = (WifiManager) getApplicationContext().getSystemService(Context.WIFI_SERVICE);
                 scanWifi();
@@ -105,9 +97,13 @@ public class MainActivity extends AppCompatActivity {
             scanResultList = wifiManager.getScanResults();
             unregisterReceiver(this);
 
-//            for(ScanResult scanResult : scanResultList) {
-//                Log.d("test12", scanResult.BSSID + scanResult.level);
-//            }
+            TextView appLog = findViewById(R.id.app_log);
+            String scanLog = "";
+            for(ScanResult scanResult : scanResultList) {
+                scanLog += "BSSID: " + scanResult.BSSID + "  level: " + scanResult.level + "\n";
+            }
+            appLog.setText(scanLog);
+
             try {
                 resultObj.put("position", WLocation);
             } catch(JSONException e) {
@@ -130,9 +126,6 @@ public class MainActivity extends AppCompatActivity {
                     e.printStackTrace();
                 }
                 array.put(WjsonParam);
-
-
-
             }
 
             try {
@@ -140,15 +133,13 @@ public class MainActivity extends AppCompatActivity {
             } catch (JSONException e) {
                 e.printStackTrace();
             }
-            new Thread() {
-                public void run() {
-                    String result="Fail";
-                    Post post = new Post();
-                    result = post.POST(URL,resultObj);
-                    Log.d("test12", "Result : " + result);
-                    //locationResult.setText(result);
-                }
-            }.start();
+            new Thread(() -> {
+                String result="Fail";
+                Post post = new Post();
+                result = post.POST(URL,resultObj);
+                Log.d("test12", "Result : " + result);
+                locationResult.setText(result);
+            }).start();
 
         }
     };

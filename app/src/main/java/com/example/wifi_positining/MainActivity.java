@@ -48,12 +48,12 @@ public class MainActivity extends AppCompatActivity {
     private List<ScanResult> scanResultList;
 
     private String URL = "http://server.chromato99.com/add";
-    private String Wmac;
-    private int Wrss;
-    private String StrWrss;
+    private String mac;
+    private int rss;
+    private String str_rss;
     private String WLocation;
 
-    JSONObject WjsonParam = new JSONObject();
+    JSONObject one_wifi_json = new JSONObject();
     JSONObject resultObj = new JSONObject();
 
     @Override
@@ -138,22 +138,22 @@ public class MainActivity extends AppCompatActivity {
             } catch (JSONException e) {
                 e.printStackTrace();
             }
-            JSONArray array = new JSONArray();
+            JSONArray json_array = new JSONArray();
             for (ScanResult scanResult : scanResultList) {
-                WjsonParam = new JSONObject();
-                Wmac = scanResult.BSSID;
-                Wrss = scanResult.level;
-                StrWrss = String.valueOf(Wrss);
+                one_wifi_json = new JSONObject();
+                mac = scanResult.BSSID;
+                rss = scanResult.level;
+                str_rss = String.valueOf(rss);
                 try {
-                    WjsonParam.put("mac", Wmac);
-                    WjsonParam.put("rss", StrWrss);
+                    one_wifi_json.put("mac", mac);
+                    one_wifi_json.put("rss", str_rss);
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
-                array.put(WjsonParam);
+                json_array.put(one_wifi_json);
             }
             try {
-                resultObj.put("wifi_data", array);
+                resultObj.put("wifi_data", json_array);
             } catch (JSONException e) {
                 e.printStackTrace();
             }

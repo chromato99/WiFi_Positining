@@ -1,9 +1,11 @@
 package com.example.wifi_positining;
 
+import android.Manifest;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.pm.PackageManager;
 import android.net.wifi.ScanResult;
 import android.net.wifi.WifiManager;
 import android.os.Bundle;
@@ -14,6 +16,8 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.NetworkResponse;
@@ -37,7 +41,7 @@ public class MainActivity extends AppCompatActivity {
 
     private Button scanButton;
     private EditText locationText;
-    private Button request;
+    private Button requestPosition;
     private TextView locationResult;
 
     private WifiManager wifiManager;
@@ -58,8 +62,30 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.find_location);
 
         scanButton = findViewById(R.id.scanBtn);
-        request = findViewById(R.id.requestPosition);
+        requestPosition = findViewById(R.id.requestPosition);
         locationResult = findViewById(R.id.LocationResult);
+
+        if (ContextCompat.checkSelfPermission(MainActivity.this,
+                Manifest.permission.ACCESS_COARSE_LOCATION)
+                != PackageManager.PERMISSION_GRANTED) {
+
+            Log.d("permission","checkSelfPermission");
+            if (ActivityCompat.shouldShowRequestPermissionRationale(MainActivity.this,
+                    Manifest.permission.ACCESS_COARSE_LOCATION)) {
+                Log.d("permission","shouldShowRequestPermissionRationale");
+                // 사용자에게 설명을 보여줍니다.
+                // 권한 요청을 다시 시도합니다.
+            } else {
+                // 권한요청
+                Log.d("permission","권한 요청");
+                ActivityCompat.requestPermissions(MainActivity.this,
+                        new String[]{Manifest.permission.ACCESS_COARSE_LOCATION,
+                                Manifest.permission.ACCESS_FINE_LOCATION,
+                                Manifest.permission.ACCESS_WIFI_STATE,Manifest.permission.CHANGE_WIFI_STATE},
+                        1000);
+            }
+        }
+
 
         scanButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -72,7 +98,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        request.setOnClickListener(new View.OnClickListener() {
+        requestPosition.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 URL = "http://server.chromato99.com/findPosition";
@@ -99,27 +125,25 @@ public class MainActivity extends AppCompatActivity {
             scanResultList.sort((s1, s2) -> s2.level - s1.level);
 
 
-            TextView appLog = findViewById(R.id.app_log);
+            TextView logTextView = findViewById(R.id.app_log);
             String scanLog = "";
             for (ScanResult scanResult : scanResultList) {
                 scanLog += "BSSID: " + scanResult.BSSID + "  level: " + scanResult.level + "\n";
             }
-            appLog.setText(scanLog);
+            logTextView.setText(scanLog);
 
+            // 서버에 보낼 JSON설정 부분
             try {
                 resultObj.put("position", WLocation);
             } catch (JSONException e) {
                 e.printStackTrace();
             }
-
             JSONArray array = new JSONArray();
             for (ScanResult scanResult : scanResultList) {
                 WjsonParam = new JSONObject();
                 Wmac = scanResult.BSSID;
                 Wrss = scanResult.level;
                 StrWrss = String.valueOf(Wrss);
-
-
                 try {
                     WjsonParam.put("mac", Wmac);
                     WjsonParam.put("rss", StrWrss);
@@ -128,14 +152,13 @@ public class MainActivity extends AppCompatActivity {
                 }
                 array.put(WjsonParam);
             }
-
             try {
                 resultObj.put("wifi_data", array);
             } catch (JSONException e) {
                 e.printStackTrace();
             }
 
-
+            // 서버와 통신하는 부분
             try {
                 RequestQueue requestQueue = Volley.newRequestQueue(getApplicationContext());
                 String mRequestBody = resultObj.toString(); // json을 통신으로 보내기위해 문자열로 변환하는 부분
@@ -171,13 +194,10 @@ public class MainActivity extends AppCompatActivity {
                         return Response.success(responseString, HttpHeaderParser.parseCacheHeaders(response));
                     }
                 };
-
                 requestQueue.add(stringRequest);
             } catch (Exception e) {
                 e.printStackTrace();
             }
         }
-
-
     };
 }

@@ -35,14 +35,12 @@
             android:src="@drawable/ic_baseline_menu_24" />
     </LinearLayout>
 
-    <TextView
+    <EditText
+        android:id="@+id/positionInput"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@drawable/edge"
-        android:gravity="center"
-        android:text="2022.05.17(화)"
-        android:textSize="28sp"
-        android:textStyle="bold" />
+        android:hint="Position Data"
+        android:textSize="18sp" />
 
     <ScrollView
         android:layout_width="match_parent"
@@ -55,11 +53,14 @@
 
     </ScrollView>
 
-    <EditText
-        android:id="@+id/positionInput"
+    <TextView
+        android:id="@+id/LocationResult"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Position Data"
+        android:layout_marginTop="30dp"
+        android:background="@drawable/edge3"
+        android:gravity="center"
+        android:text="위치정보???나오는 칸??"
         android:textSize="18sp" />
 
     <LinearLayout
@@ -83,55 +84,10 @@
 
     </LinearLayout>
 
-    <TextView
-        android:id="@+id/LocationResult"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="30dp"
-        android:background="@drawable/edge3"
-        android:gravity="center"
-        android:text="위치정보???나오는 칸??"
-        android:textSize="18sp" />
-
     <View
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:layout_weight="1" />
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="60dp"
-        android:background="#1D6A96"
-        android:gravity="center_vertical"
-        android:orientation="horizontal">
-
-        <ImageView
-            android:layout_width="80dp"
-            android:layout_height="match_parent"
-            android:src="@drawable/ic_baseline_home_24" />
-
-        <ImageView
-            android:layout_width="83dp"
-            android:layout_height="match_parent"
-            android:src="@drawable/ic_outline_replay_24" />
-
-        <ImageView
-            android:layout_width="83dp"
-            android:layout_height="match_parent"
-            android:src="@drawable/ic_baseline_question_answer_24" />
-
-        <ImageView
-            android:layout_width="91dp"
-            android:layout_height="match_parent"
-            android:src="@drawable/ic_baseline_event_24" />
-
-        <ImageView
-            android:layout_width="80dp"
-            android:layout_height="match_parent"
-            android:src="@drawable/ic_baseline_exit_to_app_24" />
-
-
-    </LinearLayout>
 
 
 </LinearLayout>

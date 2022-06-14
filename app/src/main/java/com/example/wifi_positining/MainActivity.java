@@ -148,6 +148,9 @@ public class MainActivity extends AppCompatActivity {
             }
             try {
                 resultObj.put("wifi_data", json_array);
+
+                EditText passwordText = findViewById(R.id.passwordInput);
+                resultObj.put("password", passwordText.getText());
             } catch (JSONException e) {
                 e.printStackTrace();
             }

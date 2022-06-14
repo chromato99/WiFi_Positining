@@ -40,6 +40,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="Position Data"
+        android:minHeight="48dp"
         android:textSize="18sp" />
 
     <ScrollView
@@ -83,11 +84,6 @@
             android:text="Find Position" />
 
     </LinearLayout>
-
-    <View
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:layout_weight="1" />
 
 
 </LinearLayout>

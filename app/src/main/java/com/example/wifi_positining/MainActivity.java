@@ -39,18 +39,12 @@ import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
 
-    private Button scanButton;
     private EditText locationText;
-    private Button requestPosition;
     private TextView locationResult;
 
     private WifiManager wifiManager;
-    private List<ScanResult> scanResultList;
 
     private String URL = "http://server.chromato99.com/add";
-    private String mac;
-    private int rss;
-    private String str_rss;
     private String WLocation;
 
     JSONObject one_wifi_json = new JSONObject();
@@ -61,8 +55,8 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.find_location);
 
-        scanButton = findViewById(R.id.scanBtn);
-        requestPosition = findViewById(R.id.requestPosition);
+        Button scanButton = findViewById(R.id.scanBtn);
+        Button requestPosition = findViewById(R.id.requestPosition);
         locationResult = findViewById(R.id.LocationResult);
 
         if (ContextCompat.checkSelfPermission(MainActivity.this,
@@ -119,7 +113,7 @@ public class MainActivity extends AppCompatActivity {
     BroadcastReceiver wifiReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
-            scanResultList = wifiManager.getScanResults();
+            List<ScanResult> scanResultList = wifiManager.getScanResults();
             unregisterReceiver(this);
             // scan result 정렬
             scanResultList.sort((s1, s2) -> s2.level - s1.level);
@@ -141,9 +135,9 @@ public class MainActivity extends AppCompatActivity {
             JSONArray json_array = new JSONArray();
             for (ScanResult scanResult : scanResultList) {
                 one_wifi_json = new JSONObject();
-                mac = scanResult.BSSID;
-                rss = scanResult.level;
-                str_rss = String.valueOf(rss);
+                String mac = scanResult.BSSID;
+                int rss = scanResult.level;
+                String str_rss = String.valueOf(rss);
                 try {
                     one_wifi_json.put("mac", mac);
                     one_wifi_json.put("rss", str_rss);

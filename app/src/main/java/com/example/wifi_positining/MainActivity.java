@@ -41,6 +41,8 @@ public class MainActivity extends AppCompatActivity {
 
     private EditText locationText;
     private TextView locationResult;
+    private Button scanButton;
+    private Button requestPosition;
 
     private WifiManager wifiManager;
 
@@ -55,8 +57,8 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.find_location);
 
-        Button scanButton = findViewById(R.id.scanBtn);
-        Button requestPosition = findViewById(R.id.requestPosition);
+        scanButton = findViewById(R.id.scanBtn);
+        requestPosition = findViewById(R.id.requestPosition);
         locationResult = findViewById(R.id.LocationResult);
 
         if (ContextCompat.checkSelfPermission(MainActivity.this,
@@ -89,6 +91,8 @@ public class MainActivity extends AppCompatActivity {
                 WLocation = locationText.getText().toString();
                 wifiManager = (WifiManager) getApplicationContext().getSystemService(Context.WIFI_SERVICE);
                 scanWifi();
+                scanButton.setEnabled(false);
+                requestPosition.setEnabled(false);
             }
         });
 
@@ -100,6 +104,8 @@ public class MainActivity extends AppCompatActivity {
                 WLocation = locationText.getText().toString();
                 wifiManager = (WifiManager) getApplicationContext().getSystemService(Context.WIFI_SERVICE);
                 scanWifi();
+                scanButton.setEnabled(false);
+                requestPosition.setEnabled(false);
             }
         });
 
@@ -165,6 +171,8 @@ public class MainActivity extends AppCompatActivity {
                     public void onResponse(String response) {
                         Log.i("test12", response);
                         locationResult.setText(response); // 결과 출력해주는 부분
+                        scanButton.setEnabled(true);
+                        requestPosition.setEnabled(true);
                     }
                 }, new Response.ErrorListener() {
                     @Override

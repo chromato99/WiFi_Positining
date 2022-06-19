@@ -143,10 +143,10 @@ public class MainActivity extends AppCompatActivity {
                 one_wifi_json = new JSONObject();
                 String mac = scanResult.BSSID;
                 int rss = scanResult.level;
-                String str_rss = String.valueOf(rss);
+
                 try {
                     one_wifi_json.put("mac", mac);
-                    one_wifi_json.put("rss", str_rss);
+                    one_wifi_json.put("rss", rss);
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }

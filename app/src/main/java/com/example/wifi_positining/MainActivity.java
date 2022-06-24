@@ -46,7 +46,7 @@ public class MainActivity extends AppCompatActivity {
 
     private WifiManager wifiManager;
 
-    private String URL = "http://wifi.chromato99.com/add";
+    private String URL = "https://wifi.chromato99.com/add";
     private String WLocation;
 
     JSONObject one_wifi_json = new JSONObject();
@@ -86,7 +86,7 @@ public class MainActivity extends AppCompatActivity {
         scanButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                URL = "http://wifi.chromato99.com/add";
+                URL = "https://wifi.chromato99.com/add";
                 locationText = findViewById(R.id.positionInput);
                 WLocation = locationText.getText().toString();
                 wifiManager = (WifiManager) getApplicationContext().getSystemService(Context.WIFI_SERVICE);
@@ -99,7 +99,7 @@ public class MainActivity extends AppCompatActivity {
         requestPosition.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                URL = "http://wifi.chromato99.com/findPosition";
+                URL = "https://wifi.chromato99.com/findPosition";
                 locationText = findViewById(R.id.positionInput);
                 WLocation = locationText.getText().toString();
                 wifiManager = (WifiManager) getApplicationContext().getSystemService(Context.WIFI_SERVICE);

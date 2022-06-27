@@ -35,15 +35,15 @@ import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
 
-    private EditText locationText;
-    private TextView locationResult;
+    private EditText positionInput;
+    private String positionText;
+    private TextView positionResult;
     private Button scanButton;
     private Button requestPosition;
 
     private WifiManager wifiManager;
 
     private String URL = "https://wifi.chromato99.com/add";
-    private String WLocation;
 
     JSONObject one_wifi_json = new JSONObject();
     JSONObject resultObj = new JSONObject();
@@ -55,7 +55,8 @@ public class MainActivity extends AppCompatActivity {
 
         scanButton = findViewById(R.id.scanBtn);
         requestPosition = findViewById(R.id.requestPosition);
-        locationResult = findViewById(R.id.LocationResult);
+        positionInput = findViewById(R.id.positionInput);
+        positionResult = findViewById(R.id.LocationResult);
 
         if (ContextCompat.checkSelfPermission(MainActivity.this,
                 Manifest.permission.ACCESS_COARSE_LOCATION)
@@ -81,18 +82,22 @@ public class MainActivity extends AppCompatActivity {
 
         scanButton.setOnClickListener(view -> {
             URL = "https://wifi.chromato99.com/add";
-            locationText = findViewById(R.id.positionInput);
-            WLocation = locationText.getText().toString();
-            wifiManager = (WifiManager) getApplicationContext().getSystemService(Context.WIFI_SERVICE);
-            scanWifi();
-            scanButton.setEnabled(false);
-            requestPosition.setEnabled(false);
+
+            positionText = positionInput.getText().toString();
+
+            if (positionText.equals("")) {
+                positionResult.setText("Please input position");
+            } else {
+                wifiManager = (WifiManager) getApplicationContext().getSystemService(Context.WIFI_SERVICE);
+                scanWifi();
+                scanButton.setEnabled(false);
+                requestPosition.setEnabled(false);
+            }
         });
 
         requestPosition.setOnClickListener(v -> {
             URL = "https://wifi.chromato99.com/findPosition";
-            locationText = findViewById(R.id.positionInput);
-            WLocation = locationText.getText().toString();
+            positionText = "";
             wifiManager = (WifiManager) getApplicationContext().getSystemService(Context.WIFI_SERVICE);
             scanWifi();
             scanButton.setEnabled(false);
@@ -124,7 +129,7 @@ public class MainActivity extends AppCompatActivity {
 
             // 서버에 보낼 JSON 설정 부분
             try {
-                resultObj.put("position", WLocation);
+                resultObj.put("position", positionText);
             } catch (JSONException e) {
                 e.printStackTrace();
             }
@@ -146,7 +151,7 @@ public class MainActivity extends AppCompatActivity {
                 resultObj.put("wifi_data", json_array);
 
                 EditText passwordText = findViewById(R.id.passwordInput);
-                resultObj.put("password", passwordText.getText());
+                resultObj.put("password", passwordText.getText().toString());
             } catch (JSONException e) {
                 e.printStackTrace();
             }
@@ -158,7 +163,7 @@ public class MainActivity extends AppCompatActivity {
 
                 StringRequest stringRequest = new StringRequest(Request.Method.POST, URL, response -> {
                     Log.i("test12", response);
-                    locationResult.setText(response); // 결과 출력해주는 부분
+                    positionResult.setText(response); // 결과 출력해주는 부분
                     scanButton.setEnabled(true);
                     requestPosition.setEnabled(true);
                 }, error -> Log.e("test12", error.toString())) {

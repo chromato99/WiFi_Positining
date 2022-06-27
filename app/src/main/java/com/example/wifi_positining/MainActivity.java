@@ -136,12 +136,12 @@ public class MainActivity extends AppCompatActivity {
             JSONArray json_array = new JSONArray();
             for (ScanResult scanResult : scanResultList) {
                 one_wifi_json = new JSONObject();
-                String mac = scanResult.BSSID;
-                int rss = scanResult.level;
+                String bssid = scanResult.BSSID;
+                int rssi = scanResult.level;
 
                 try {
-                    one_wifi_json.put("mac", mac);
-                    one_wifi_json.put("rss", rss);
+                    one_wifi_json.put("bssid", bssid);
+                    one_wifi_json.put("rssi", rssi);
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }

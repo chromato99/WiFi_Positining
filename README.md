@@ -2,7 +2,7 @@
 
 Gachon Univefrsity Sensor and Wireless Network Class Term Project.
  
-This is a project for the experimental implementation of WiFi Indoor Positioning technology with WiFi fingerprinting method.
+This is a project for the experimental implementation of WiFi Indoor Positioning technology. We used WiFi Fingerprinting technique to implement WiFi Positioning. This is for more general use as there are APs that do not yet support WiFi RTT.
 
 This is an app repository for clients, and the server implementations can be found at the link below.<br>
 Golang : https://github.com/chromato99/WiFi_Positioning_Server_go<br>

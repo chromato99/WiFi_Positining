@@ -1,9 +1,5 @@
 package com.example.wifi_positining;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.app.ActivityCompat;
-
 import android.Manifest;
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -18,36 +14,35 @@ import android.net.wifi.rtt.RangingResultCallback;
 import android.net.wifi.rtt.WifiRttManager;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.View;
 import android.widget.Button;
+
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.Executor;
 
+/*
+This is WiFi Rtt implementation code.
+This is code for testing and is not yet actually used in apps.
+*/
 public class WifiScanActivity extends AppCompatActivity {
 
     private WifiManager wifiManager;
-    private WifiRttManager wifiRttManager;
     private Context context;
-    private BroadcastReceiver wifiScanReceiver;
-    private IntentFilter intentFilter;
-    private Button button;
-    private RangingRequest.Builder builder;
-    private RangingRequest req;
-    private Executor executor;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_wifi_scan);
 
-        button = findViewById(R.id.button);
+        Button button = findViewById(R.id.button);
 
         context = getApplicationContext();
         wifiManager = (WifiManager) context.getSystemService(Context.WIFI_SERVICE);
 
-        wifiScanReceiver = new BroadcastReceiver() {
+        // scan failure handling
+        BroadcastReceiver wifiScanReceiver = new BroadcastReceiver() {
             @Override
             public void onReceive(Context c, Intent intent) {
                 boolean success = intent.getBooleanExtra(WifiManager.EXTRA_RESULTS_UPDATED, false);
@@ -63,21 +58,18 @@ public class WifiScanActivity extends AppCompatActivity {
         };
 
 
-        intentFilter = new IntentFilter();
+        IntentFilter intentFilter = new IntentFilter();
         intentFilter.addAction(WifiManager.SCAN_RESULTS_AVAILABLE_ACTION);
         context.registerReceiver(wifiScanReceiver, intentFilter);
 
-        button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                boolean success = wifiManager.startScan();
-                if (!success) {
-                    // scan failure handling
-                    Log.d("test12", "Scan Fail1");
-                    scanFailure();
-                } else {
-                    Log.d("test12", "Scan Success1");
-                }
+        button.setOnClickListener(view -> {
+            boolean success = wifiManager.startScan();
+            if (!success) {
+                // scan failure handling
+                Log.d("test12", "Scan Fail1");
+                scanFailure();
+            } else {
+                Log.d("test12", "Scan Success1");
             }
         });
 
@@ -87,9 +79,8 @@ public class WifiScanActivity extends AppCompatActivity {
     private void scanSuccess() {
         List<ScanResult> results = wifiManager.getScanResults();
         List<ScanResult> trueResults = new ArrayList<>();
-        builder = new RangingRequest.Builder();
+        RangingRequest.Builder builder = new RangingRequest.Builder();
         builder.addAccessPoints(results);
-        RangingRequest request = builder.build();
 
         for(ScanResult result : results){
             trueResults.add(result);
@@ -97,7 +88,7 @@ public class WifiScanActivity extends AppCompatActivity {
 //            if(result.is80211mcResponder()){
 //                trueResults.add(result);
 //            }
-            if(trueResults.size() >= request.getMaxPeers()){
+            if(trueResults.size() >= RangingRequest.getMaxPeers()){
                 break;
             }
         }
@@ -115,7 +106,7 @@ public class WifiScanActivity extends AppCompatActivity {
             Log.d("test12", "Rtt config!!");
         }
 
-        wifiRttManager = (WifiRttManager) context.getSystemService(Context.WIFI_RTT_RANGING_SERVICE);
+        WifiRttManager wifiRttManager = (WifiRttManager) context.getSystemService(Context.WIFI_RTT_RANGING_SERVICE);
 
         if (wifiRttManager.isAvailable()) {
             Log.d("test12", "Rtt available!!");

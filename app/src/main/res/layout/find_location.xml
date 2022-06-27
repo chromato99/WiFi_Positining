@@ -8,33 +8,6 @@
     android:orientation="vertical"
     tools:context=".MainActivity">
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:background="#FFFFFF"
-        android:gravity="center_vertical"
-        android:orientation="horizontal">
-
-        <ImageView
-            android:layout_width="314dp"
-            android:layout_height="match_parent"
-            android:background="@drawable/edge"
-            android:scaleType="centerCrop"
-            android:src="@drawable/marklogo_slogan" />
-
-        <View
-            android:layout_width="0dp"
-            android:layout_height="0dp"
-            android:layout_weight="1" />
-
-
-        <ImageView
-            android:layout_width="62dp"
-            android:layout_height="match_parent"
-            android:layout_gravity="right"
-            android:src="@drawable/ic_baseline_menu_24" />
-    </LinearLayout>
-
     <EditText
         android:id="@+id/positionInput"
         android:layout_width="match_parent"
@@ -66,9 +39,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="30dp"
-        android:background="@drawable/edge3"
         android:gravity="center"
-        android:text="위치정보???나오는 칸??"
+        android:text="Result Output"
         android:textSize="18sp" />
 
     <LinearLayout

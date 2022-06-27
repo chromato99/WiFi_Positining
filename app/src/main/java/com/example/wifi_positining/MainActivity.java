@@ -10,7 +10,6 @@ import android.net.wifi.ScanResult;
 import android.net.wifi.WifiManager;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -19,16 +18,13 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
-import com.android.volley.AuthFailureError;
 import com.android.volley.NetworkResponse;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
-import com.android.volley.VolleyError;
 import com.android.volley.toolbox.HttpHeaderParser;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
-
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -83,30 +79,24 @@ public class MainActivity extends AppCompatActivity {
         }
 
 
-        scanButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                URL = "https://wifi.chromato99.com/add";
-                locationText = findViewById(R.id.positionInput);
-                WLocation = locationText.getText().toString();
-                wifiManager = (WifiManager) getApplicationContext().getSystemService(Context.WIFI_SERVICE);
-                scanWifi();
-                scanButton.setEnabled(false);
-                requestPosition.setEnabled(false);
-            }
+        scanButton.setOnClickListener(view -> {
+            URL = "https://wifi.chromato99.com/add";
+            locationText = findViewById(R.id.positionInput);
+            WLocation = locationText.getText().toString();
+            wifiManager = (WifiManager) getApplicationContext().getSystemService(Context.WIFI_SERVICE);
+            scanWifi();
+            scanButton.setEnabled(false);
+            requestPosition.setEnabled(false);
         });
 
-        requestPosition.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                URL = "https://wifi.chromato99.com/findPosition";
-                locationText = findViewById(R.id.positionInput);
-                WLocation = locationText.getText().toString();
-                wifiManager = (WifiManager) getApplicationContext().getSystemService(Context.WIFI_SERVICE);
-                scanWifi();
-                scanButton.setEnabled(false);
-                requestPosition.setEnabled(false);
-            }
+        requestPosition.setOnClickListener(v -> {
+            URL = "https://wifi.chromato99.com/findPosition";
+            locationText = findViewById(R.id.positionInput);
+            WLocation = locationText.getText().toString();
+            wifiManager = (WifiManager) getApplicationContext().getSystemService(Context.WIFI_SERVICE);
+            scanWifi();
+            scanButton.setEnabled(false);
+            requestPosition.setEnabled(false);
         });
 
     }
@@ -132,7 +122,7 @@ public class MainActivity extends AppCompatActivity {
             }
             logTextView.setText(scanLog);
 
-            // 서버에 보낼 JSON설정 부분
+            // 서버에 보낼 JSON 설정 부분
             try {
                 resultObj.put("position", WLocation);
             } catch (JSONException e) {
@@ -164,34 +154,26 @@ public class MainActivity extends AppCompatActivity {
             // 서버와 통신하는 부분
             try {
                 RequestQueue requestQueue = Volley.newRequestQueue(getApplicationContext());
-                String mRequestBody = resultObj.toString(); // json을 통신으로 보내기위해 문자열로 변환하는 부분
+                String mRequestBody = resultObj.toString(); // json 을 통신으로 보내기위해 문자열로 변환하는 부분
 
-                StringRequest stringRequest = new StringRequest(Request.Method.POST, URL, new Response.Listener<String>() {
-                    @Override
-                    public void onResponse(String response) {
-                        Log.i("test12", response);
-                        locationResult.setText(response); // 결과 출력해주는 부분
-                        scanButton.setEnabled(true);
-                        requestPosition.setEnabled(true);
-                    }
-                }, new Response.ErrorListener() {
-                    @Override
-                    public void onErrorResponse(VolleyError error) {
-                        Log.e("test12", error.toString());
-                    }
-                }) {
+                StringRequest stringRequest = new StringRequest(Request.Method.POST, URL, response -> {
+                    Log.i("test12", response);
+                    locationResult.setText(response); // 결과 출력해주는 부분
+                    scanButton.setEnabled(true);
+                    requestPosition.setEnabled(true);
+                }, error -> Log.e("test12", error.toString())) {
                     @Override
                     public String getBodyContentType() {
                         return "application/json; charset=utf-8";
                     }
 
                     @Override
-                    public byte[] getBody() throws AuthFailureError { // 요청 보낼 데이터를 처리하는 부분
+                    public byte[] getBody() { // 요청 보낼 데이터를 처리하는 부분
                         return mRequestBody == null ? null : mRequestBody.getBytes(StandardCharsets.UTF_8);
                     }
 
                     @Override
-                    protected Response<String> parseNetworkResponse(NetworkResponse response) { // onResponse에 넘겨줄 응답을 처리하는 부분
+                    protected Response<String> parseNetworkResponse(NetworkResponse response) { // onResponse 에 넘겨줄 응답을 처리하는 부분
                         String responseString = "";
                         if (response != null) {
                             responseString = new String(response.data, StandardCharsets.UTF_8); // 응답 데이터를 변환해주는 부분

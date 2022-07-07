@@ -35,28 +35,31 @@ import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
 
+    private EditText serverAddressInput;
     private EditText positionInput;
     private String positionText;
-    private TextView positionResult;
-    private Button scanButton;
-    private Button requestPosition;
+    private TextView resultText;
+    private Button addDatasetBtn;
+    private Button findPositionBtn;
 
     private WifiManager wifiManager;
 
-    private String URL = "https://wifi.chromato99.com/add";
+    private String serverAddress;
+    private String URL;
 
     JSONObject one_wifi_json = new JSONObject();
-    JSONObject resultObj = new JSONObject();
+    JSONObject result_json = new JSONObject();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.find_location);
+        setContentView(R.layout.activity_main);
 
-        scanButton = findViewById(R.id.scanBtn);
-        requestPosition = findViewById(R.id.requestPosition);
+        serverAddressInput = findViewById(R.id.serverAddressInput);
+        addDatasetBtn = findViewById(R.id.addDatasetBtn);
+        findPositionBtn = findViewById(R.id.findPositionBtn);
         positionInput = findViewById(R.id.positionInput);
-        positionResult = findViewById(R.id.LocationResult);
+        resultText = findViewById(R.id.resultText);
 
         if (ContextCompat.checkSelfPermission(MainActivity.this,
                 Manifest.permission.ACCESS_COARSE_LOCATION)
@@ -80,28 +83,34 @@ public class MainActivity extends AppCompatActivity {
         }
 
 
-        scanButton.setOnClickListener(view -> {
-            URL = "https://wifi.chromato99.com/add";
-
+        addDatasetBtn.setOnClickListener(view -> {
+            serverAddress = serverAddressInput.getText().toString();
             positionText = positionInput.getText().toString();
 
-            if (positionText.equals("")) {
-                positionResult.setText("Please input position");
+            if (serverAddress.equals("") || positionText.equals("")) {
+                resultText.setText("Please input server address and position");
             } else {
+                URL = serverAddress + "/add";
                 wifiManager = (WifiManager) getApplicationContext().getSystemService(Context.WIFI_SERVICE);
                 scanWifi();
-                scanButton.setEnabled(false);
-                requestPosition.setEnabled(false);
+                addDatasetBtn.setEnabled(false);
+                findPositionBtn.setEnabled(false);
             }
         });
 
-        requestPosition.setOnClickListener(v -> {
-            URL = "https://wifi.chromato99.com/findPosition";
+        findPositionBtn.setOnClickListener(v -> {
+            serverAddress = serverAddressInput.getText().toString();
             positionText = "";
-            wifiManager = (WifiManager) getApplicationContext().getSystemService(Context.WIFI_SERVICE);
-            scanWifi();
-            scanButton.setEnabled(false);
-            requestPosition.setEnabled(false);
+            if (serverAddress.equals("")) {
+                resultText.setText("Please input server address");
+            } else {
+                URL = serverAddress + "/findPosition";
+                Log.d("test12", URL);
+                wifiManager = (WifiManager) getApplicationContext().getSystemService(Context.WIFI_SERVICE);
+                scanWifi();
+                addDatasetBtn.setEnabled(false);
+                findPositionBtn.setEnabled(false);
+            }
         });
 
     }
@@ -129,7 +138,7 @@ public class MainActivity extends AppCompatActivity {
 
             // 서버에 보낼 JSON 설정 부분
             try {
-                resultObj.put("position", positionText);
+                result_json.put("position", positionText);
             } catch (JSONException e) {
                 e.printStackTrace();
             }
@@ -148,10 +157,10 @@ public class MainActivity extends AppCompatActivity {
                 json_array.put(one_wifi_json);
             }
             try {
-                resultObj.put("wifi_data", json_array);
+                result_json.put("wifi_data", json_array);
 
                 EditText passwordText = findViewById(R.id.passwordInput);
-                resultObj.put("password", passwordText.getText().toString());
+                result_json.put("password", passwordText.getText().toString());
             } catch (JSONException e) {
                 e.printStackTrace();
             }
@@ -159,14 +168,19 @@ public class MainActivity extends AppCompatActivity {
             // 서버와 통신하는 부분
             try {
                 RequestQueue requestQueue = Volley.newRequestQueue(getApplicationContext());
-                String mRequestBody = resultObj.toString(); // json 을 통신으로 보내기위해 문자열로 변환하는 부분
+                String mRequestBody = result_json.toString(); // json 을 통신으로 보내기위해 문자열로 변환하는 부분
 
                 StringRequest stringRequest = new StringRequest(Request.Method.POST, URL, response -> {
                     Log.i("test12", response);
-                    positionResult.setText(response); // 결과 출력해주는 부분
-                    scanButton.setEnabled(true);
-                    requestPosition.setEnabled(true);
-                }, error -> Log.e("test12", error.toString())) {
+                    resultText.setText(response); // 결과 출력해주는 부분
+                    addDatasetBtn.setEnabled(true);
+                    findPositionBtn.setEnabled(true);
+                }, error -> {
+                    Log.e("test12", error.toString());
+                    resultText.setText("Connection error! Check server address!\nExample : https://example.com");
+                    addDatasetBtn.setEnabled(true);
+                    findPositionBtn.setEnabled(true);
+                }) {
                     @Override
                     public String getBodyContentType() {
                         return "application/json; charset=utf-8";
@@ -174,7 +188,7 @@ public class MainActivity extends AppCompatActivity {
 
                     @Override
                     public byte[] getBody() { // 요청 보낼 데이터를 처리하는 부분
-                        return mRequestBody == null ? null : mRequestBody.getBytes(StandardCharsets.UTF_8);
+                        return mRequestBody.getBytes(StandardCharsets.UTF_8);
                     }
 
                     @Override

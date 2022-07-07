@@ -19,11 +19,16 @@ Therefore, this app is responsible for measuring the surrounding Wi-Fi signal da
 
 <img src="https://user-images.githubusercontent.com/20539422/177817563-bc69ceab-beda-4e3c-9681-8c8769068ee3.png" width=35% height=35%>
 
-<b>Server Address</b> : Enter the server address to communicate with, including 'http://' or 'https://'. ex) https://example.com<br>
-<b>Position</b> : This is the location label input of the newly added data. (Not necessary when doing find position, not adding data)<br>
-<b>Password</b> : This is the password input when doing add dataset. (Password can be set on the server and is not needed for find position)<br>
-<b>Result ouput</b> : This is the server response output.<br>
-<b>Add dataset</b> : Button that sends a request to add data to the server (Position and Password input at the top are required)<br>
+<b>Server Address</b> : Enter the server address to communicate with, including 'http://' or 'https://'. <br>ex) https://example.com
+
+<b>Position</b> : This is the location label input of the newly added data. <br>(Not necessary when doing find position)
+
+<b>Password</b> : This is the password input when doing add dataset. <br>(Password can be set on the server and is not needed for find position)
+
+<b>Result ouput</b> : This is the server response output.
+
+<b>Add dataset</b> : Button that sends a request to add data to the server. <br>(Position and Password input at the top are required)
+
 <b>Find position</b> : A button that sends a request to find your current location.
 
 # Implementation
